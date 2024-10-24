@@ -21,3 +21,21 @@
 ```bash
 docker compose up -d
 ```
+
+## Some Images
+
+- Main Page
+
+> ![alt text](images/main.png)
+
+- Add a Post
+
+> ![alt text](images/addpost.png)
+
+- See a Post
+
+> ![alt text](images/post.png)
+
+- Bakend API's Swagger
+
+> ![alt text](images/swagger.png)
