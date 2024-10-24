@@ -4,7 +4,7 @@ import { prisma } from "./lib/db";
 import { BlogPostModel } from "./lib/models/blogpost.model";
 import cors from "@elysiajs/cors";
 
-const app = new Elysia()
+export const app = new Elysia()
   .use(swagger())
   .use(cors({
     origin: "*",
