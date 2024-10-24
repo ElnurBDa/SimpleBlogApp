@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:alpine
+    container_name: postgres-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      custom_network:
+        ipv4_address: ${DB_IP}
+
+  front:
+    build:
+      context: ./front/
+      dockerfile: ./Dockerfile
+    container_name: front
+    environment:
+      REACT_APP_BACK_API: ${REACT_APP_BACK_API}
+    ports:
+      - "${FRONT_PORT}:3000"
+    dns:
+      - 8.8.8.8
+    networks:
+      custom_network:
+        ipv4_address: ${FRONT_IP}
+
+  back:
+    build:
+      context: ./back/
+      dockerfile: ./Dockerfile
+    container_name: back
+    environment:
+      PORT: ${BACK_API_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+    dns:
+      - 8.8.8.8
+    networks:
+      custom_network:
+        ipv4_address: ${BACK_IP}
+
+volumes:
+  db_data:
+
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${NETWORK}
