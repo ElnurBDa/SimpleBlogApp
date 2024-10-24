@@ -1,15 +1,27 @@
-FROM oven/bun:latest
+FROM oven/bun:1-debian
 
 WORKDIR /app
 
-COPY package.json bun.lockb ./
+RUN apt-get update
 
-RUN bun install
+RUN apt-get install -y curl
 
-COPY . .
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+ENV NODE_ENV=development
+
+COPY package.json bun.lockb /app/
+
+COPY prisma /app/prisma
+
+RUN set -e && \
+    bun install && \
+    bun prisma generate
+
+COPY . /app/
 
 EXPOSE ${PORT}
 
-RUN bun prisma migrate dev -n any
-
 CMD bun src/index.ts 
+
