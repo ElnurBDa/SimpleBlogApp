@@ -13,6 +13,7 @@ services:
         ipv4_address: ${DB_IP}
 
   front:
+    image: front
     build:
       context: ./front/
       dockerfile: ./Dockerfile
@@ -28,6 +29,7 @@ services:
         ipv4_address: ${FRONT_IP}
 
   back:
+    image: back
     build:
       context: ./back/
       dockerfile: ./Dockerfile
