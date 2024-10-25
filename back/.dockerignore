@@ -1,0 +1,11 @@
+node_modules
+prisma/migrations
+test
+.env
+.env.local
+.env.example
+Dockerfile
+.git
+.gitignore
+README.MD
+
