@@ -20,6 +20,9 @@
 
 ```bash
 docker compose up -d
+# If it is your first deployment
+sudo docker exec -it <back-container-id> bun prisma migrate dev
+
 ```
 
 ## Some Images
