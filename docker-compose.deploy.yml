@@ -18,7 +18,7 @@ services:
     environment:
       REACT_APP_BACK_API: ${REACT_APP_BACK_API}
     ports:
-      - "${FRONT_PORT}:3000"
+      - "${FRONT_PORT}:80"
     networks:
       custom_network:
         ipv4_address: ${FRONT_IP}

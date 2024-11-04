@@ -25,6 +25,18 @@ sudo docker exec -it <back-container-id> bun prisma migrate dev
 
 ```
 
+## Tests
+
+```bash
+cd back
+bun test
+
+cd ..
+
+cd front
+npm test
+```
+
 ## Some Images
 
 - Main Page

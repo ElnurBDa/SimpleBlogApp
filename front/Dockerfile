@@ -1,16 +1,23 @@
-FROM node:23-alpine
+# Stage 1
+FROM node:23-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+ARG REACT_APP_BACK_API
+ENV REACT_APP_BACK_API=${REACT_APP_BACK_API}
 
+COPY package*.json ./
 RUN npm install
 
 COPY . .
-
-EXPOSE 3000
-
 RUN npm run build
 
-CMD ["npm", "start"]
+# Stage 2
+FROM nginx:alpine
+
+COPY --from=builder /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
 

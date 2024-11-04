@@ -20,6 +20,19 @@ const BlogList: React.FC = () => {
       .catch((error) => console.error("Error fetching blog posts:", error));
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACK_API}/blogposts/`)
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setPosts(response.data);
+        } else {
+          console.error("Expected an array of blog posts");
+        }
+      })
+      .catch((error) => console.error("Error fetching blog posts:", error));
+  }, []);
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>

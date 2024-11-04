@@ -1,29 +1,18 @@
-import { Elysia, t } from "elysia";
-import { swagger } from '@elysiajs/swagger'
-import { prisma } from "./lib/db";
+import { t } from "elysia";
 import { BlogPostModel } from "./lib/models/blogpost.model";
-import cors from "@elysiajs/cors";
+import { getBaseApp } from "./lib/base";
+import { DbService } from "./lib/db.service";
 
-export const app = new Elysia()
-  .use(swagger())
-  .use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  }))
-  .decorate("dbService", prisma)
-  .get("/", () => "Nothing to see here")
+export const app = getBaseApp()
+  .decorate("dbService", new DbService())
   .group("blogposts", (app) => app
     .get("/", ({ dbService }) => {
-      return dbService.blogPost.findMany()
+      return dbService.getAllBlogPosts();
     }, {
       response: t.Array(BlogPostModel)
     })
     .get("/:id", ({ dbService, params }) => {
-      return dbService.blogPost.findUnique({
-        where: {
-          id: params.id
-        }
-      })
+      return dbService.getBlogPostById(params.id);
     }, {
       params: t.Object({
         id: t.String()
@@ -31,20 +20,13 @@ export const app = new Elysia()
       response: t.Nullable(BlogPostModel)
     })
     .post("/", ({ dbService, body }) => {
-      return dbService.blogPost.create({
-        data: body
-      })
+      return dbService.createBlogPost(body);
     }, {
       body: BlogPostModel,
       response: BlogPostModel
     })
     .put("/:id", ({ dbService, body, params }) => {
-      return dbService.blogPost.update({
-        where: {
-          id: params.id
-        },
-        data: body
-      })
+      return dbService.updateBlogPost(params.id, body);
     }, {
       body: BlogPostModel,
       response: BlogPostModel,
@@ -53,11 +35,7 @@ export const app = new Elysia()
       })
     })
     .delete("/:id", ({ dbService, params }) => {
-      return dbService.blogPost.delete({
-        where: {
-          id: params.id
-        }
-      })
+      return dbService.deleteBlogPost(params.id);
     }, {
       params: t.Object({
         id: t.String()
